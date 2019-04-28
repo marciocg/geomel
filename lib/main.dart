@@ -86,15 +86,19 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   }
 
   Widget _buildListaLocalSalvo() {
-    if (_listaLocalSalvo.length == 0) {
-      _listaLocalSalvo = _recuperaListaLocaisSalvos();
-    }
+    _recuperaListaLocaisSalvos();
+
     return ListView.builder(
         padding: const EdgeInsets.all(16.0),
         itemCount: _listaLocalSalvo.length,
-        itemBuilder: (BuildContext  contexto, int indice) {
+        //reverse: true,
+        itemBuilder: (BuildContext contexto, int indice) {
+        //  if (_listaLocalSalvo.length == 0) {
+        //  _recuperaListaLocaisSalvos();
+        //  }
           return _buildRow(_listaLocalSalvo[indice], indice);
-        });
+        }
+    );
   }
 
   Widget _buildRow(String localSalvo, int indice) {
