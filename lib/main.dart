@@ -30,6 +30,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   LocationOptions locationOptions = LocationOptions(accuracy: LocationAccuracy.best, distanceFilter: 10, timeInterval: 2000);
   double latitude;
   double longitude;
+  final _listaLocalSalvo = <String>[];
 
   @override
   void initState() {
@@ -45,10 +46,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Localização atual'),
+        title: Text('Locais salvos'),
       ),
       body: Center(
-        child: Text('Centro'),
+        child: _buildListaLocalSalvo(),
         //child: Text('Latitude: ' + latitude.toString() +
         //    '\nLongitude: ' + longitude.toString()),
       ),
@@ -63,7 +64,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => setState(() {
-          _abrirURL(forceWebView: true);
+          _listaLocalSalvo.add(latitude.toString() + '/' + longitude.toString());
+          //_abrirURL(forceWebView: true);
         }),
         tooltip: 'Marcar localização no Google Maps',
         child: Icon(Icons.add_location),
@@ -79,6 +81,30 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     } else {
       throw 'Erro ao conectar em $url';
     }
+  }
+
+  Widget _buildListaLocalSalvo() {
+    return ListView.builder(
+        padding: const EdgeInsets.all(16.0),
+        itemCount: _listaLocalSalvo.length,
+        itemBuilder: (BuildContext  contexto, int indice) {
+          return _buildRow(_listaLocalSalvo[indice], indice);
+        });
+  }
+
+  Widget _buildRow(String localSalvo, int indice) {
+    return ListTile(
+      title: Text(localSalvo),
+      trailing: Icon(Icons.map, color: Colors.red),
+      onLongPress: () {
+        setState(() {
+          _listaLocalSalvo.removeAt(indice);
+        });
+      },
+      onTap: () {
+        _abrirURL(forceWebView: true);
+      },
+    );
   }
 
 }
