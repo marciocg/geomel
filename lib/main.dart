@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());
 
@@ -30,7 +31,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   LocationOptions locationOptions = LocationOptions(accuracy: LocationAccuracy.best, distanceFilter: 10, timeInterval: 2000);
   double latitude;
   double longitude;
-  final _listaLocalSalvo = <String>[];
+  List<String> _listaLocalSalvo = [];
 
   @override
   void initState() {
@@ -65,6 +66,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => setState(() {
           _listaLocalSalvo.add(latitude.toString() + '/' + longitude.toString());
+          _gravaListaLocaisSalvos();
           //_abrirURL(forceWebView: true);
         }),
         tooltip: 'Marcar localização no Google Maps',
@@ -84,6 +86,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   }
 
   Widget _buildListaLocalSalvo() {
+    if (_listaLocalSalvo.length == 0) {
+      _listaLocalSalvo = _recuperaListaLocaisSalvos();
+    }
     return ListView.builder(
         padding: const EdgeInsets.all(16.0),
         itemCount: _listaLocalSalvo.length,
@@ -99,12 +104,25 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       onLongPress: () {
         setState(() {
           _listaLocalSalvo.removeAt(indice);
+          _gravaListaLocaisSalvos();
         });
       },
       onTap: () {
         _abrirURL(forceWebView: true);
       },
     );
+  }
+
+  _recuperaListaLocaisSalvos() async {
+    final database = await SharedPreferences.getInstance();
+    final chave = 'lista_locais_salvos';
+    _listaLocalSalvo = database.getStringList(chave) ?? [];
+  }
+
+  _gravaListaLocaisSalvos() async {
+    final database = await SharedPreferences.getInstance();
+    final chave = 'lista_locais_salvos';
+    database.setStringList(chave, _listaLocalSalvo);
   }
 
 }
