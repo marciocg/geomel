@@ -32,6 +32,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   double latitude;
   double longitude;
   List<String> _listaLocalSalvo = [];
+  //List<String> _listaNomeLocal = [];
 
   @override
   void initState() {
@@ -51,12 +52,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       ),
       body: Center(
         child: _buildListaLocalSalvo(),
-        //child: Text('Latitude: ' + latitude.toString() +
-        //    '\nLongitude: ' + longitude.toString()),
       ),
       bottomNavigationBar: BottomAppBar(
         child: Container(
-          height: 80.0,
+          height: 90.0,
           child: Center(
               child: Text('Latitude: ' + latitude.toString() +
               ' Longitude: ' + longitude.toString()),
@@ -65,9 +64,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => setState(() {
-          _listaLocalSalvo.add(latitude.toString() + '/' + longitude.toString());
+          _listaLocalSalvo.add(latitude.toString() + ',' + longitude.toString());
           _gravaListaLocaisSalvos();
-          //_abrirURL(forceWebView: true);
         }),
         tooltip: 'Marcar localização no Google Maps',
         child: Icon(Icons.add_location),
@@ -76,8 +74,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     );
   }
 
-  _abrirURL({forceWebView = true}) async {
-    final url = 'https://www.google.com/maps/search/?api=1&query=' + latitude.toString() + "," + longitude.toString();
+  _abrirURL(String localizacao, {forceWebView = true}) async {
+    final url = 'https://www.google.com/maps/search/?api=1&query=' + localizacao;
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -91,11 +89,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     return ListView.builder(
         padding: const EdgeInsets.all(16.0),
         itemCount: _listaLocalSalvo.length,
-        //reverse: true,
         itemBuilder: (BuildContext contexto, int indice) {
-        //  if (_listaLocalSalvo.length == 0) {
-        //  _recuperaListaLocaisSalvos();
-        //  }
           return _buildRow(_listaLocalSalvo[indice], indice);
         }
     );
@@ -103,8 +97,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
   Widget _buildRow(String localSalvo, int indice) {
     return ListTile(
+      //title: Text("Local " + (indice + 1).toString()),
       title: Text(localSalvo),
-      trailing: Icon(Icons.map, color: Colors.red),
+      trailing: Icon(Icons.map, color: Colors.redAccent),
       onLongPress: () {
         setState(() {
           _listaLocalSalvo.removeAt(indice);
@@ -112,7 +107,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         });
       },
       onTap: () {
-        _abrirURL(forceWebView: true);
+        _abrirURL(localSalvo, forceWebView: true);
       },
     );
   }
