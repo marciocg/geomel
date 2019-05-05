@@ -71,14 +71,17 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       floatingActionButton:
       (latitude != null && longitude != null)
         ? FloatingActionButton(
-        onPressed: () => setState(() {
-          _listaLocalSalvo.add(latitude.toString() + ',' + longitude.toString());
-          _gravaListaLocaisSalvos();
-        }),
-        tooltip: 'Marcar localização no Google Maps',
-        child: Icon(Icons.add_location))
-        : Container(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+            onPressed: () => setState(() {
+              _listaLocalSalvo.add(latitude.toString() + ',' + longitude.toString());
+              _gravaListaLocaisSalvos();
+          }),
+          tooltip: 'Marcar localização no Google Maps',
+          child: Icon(Icons.add_location))
+        : FloatingActionButton(
+            backgroundColor: Colors.grey[400],
+            tooltip: 'Localização desativada',
+            child: Icon(Icons.location_off)),
+       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
