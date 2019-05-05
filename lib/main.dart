@@ -68,14 +68,16 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton:
+      (latitude != null && longitude != null)
+        ? FloatingActionButton(
         onPressed: () => setState(() {
           _listaLocalSalvo.add(latitude.toString() + ',' + longitude.toString());
           _gravaListaLocaisSalvos();
         }),
         tooltip: 'Marcar localização no Google Maps',
-        child: Icon(Icons.add_location),
-      ),
+        child: Icon(Icons.add_location))
+        : Container(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
