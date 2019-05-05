@@ -32,6 +32,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   double latitude;
   double longitude;
   List<String> _listaLocalSalvo = [];
+  //Map<String, dynamic> _mapaNomeLocal = {};
   //List<String> _listaNomeLocal = [];
 
   @override
@@ -41,6 +42,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       setState(() {
         latitude = posicao.latitude;
         longitude = posicao.longitude;
+//        latitude = (posicao.latitude != null) ? posicao.latitude : 0;
+//        longitude = (posicao.longitude != null) ? posicao.longitude : 0;
       });
     });
   }
@@ -55,10 +58,13 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       ),
       bottomNavigationBar: BottomAppBar(
         child: Container(
-          height: 90.0,
+          height: 80.0,
           child: Center(
-              child: Text('Latitude: ' + latitude.toString() +
-              ' Longitude: ' + longitude.toString()),
+              child:
+              (latitude != null && longitude != null)
+              ? Text('Latitude: ' + latitude.toString() +
+              ' Longitude: ' + longitude.toString())
+              : Text('Verifique se a localização está ativa'),
           ),
         ),
       ),
@@ -87,7 +93,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     _recuperaListaLocaisSalvos();
 
     return ListView.builder(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(9.0),
         itemCount: _listaLocalSalvo.length,
         itemBuilder: (BuildContext contexto, int indice) {
           return _buildRow(_listaLocalSalvo[indice], indice);
@@ -97,7 +103,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
   Widget _buildRow(String localSalvo, int indice) {
     return ListTile(
-      //title: Text("Local " + (indice + 1).toString()),
+//      title: Text("Local " + (indice + 1).toString()),
+//      subtitle: Text(localSalvo),
       title: Text(localSalvo),
       trailing: Icon(Icons.map, color: Colors.redAccent),
       onLongPress: () {
