@@ -15,10 +15,14 @@ Para começar a desenvolver com Flutter vale a pena ler a
 [documentação online (em inglês)](https://flutter.io/docs), que possui tutoriais simples,
 exemplos, dicas sobre desenvolvimento mobile e a referência completa da API.
 
+## Sobre o Projeto
+
+Esse aplicativo foi desenvolvido na disciplina de Construção de Software do Mestrado
+em Computação Aplicada da UnB - 2019.
+
 ## Build
 
 Este projeto foi criado com Android Studio 3.4, Flutter 1.2 e Gradle 5.4.
 Quando clonar esse repositório execute o comando abaixo antes de fazer o build:
 
-    ```flutter packages get
-    ```
+    flutter packages get
