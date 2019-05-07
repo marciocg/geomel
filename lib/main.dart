@@ -33,6 +33,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   double latitude;
   double longitude;
   List<String> _listaLocalSalvo = [];
+
   //Map<String, dynamic> _mapaNomeLocal = {};
   //List<String> _listaNomeLocal = [];
 
@@ -53,6 +54,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Locais salvos'),
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.info_outline), onPressed: _sobre),
+        ],
       ),
       body: Center(
         child: _buildListaLocalSalvo(),
@@ -62,7 +66,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           height: 70.0,
           child: Center(
             child: (latitude != null && longitude != null)
-                ? Text('\n' + 'Latitude: ' +
+                ? Text('\n' +
+                    'Latitude: ' +
                     latitude.toString() +
                     ' Longitude: ' +
                     longitude.toString())
@@ -82,17 +87,21 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                   builder: (_) => new AlertDialog(
                         title: new Text("Insira o nome do local"),
                         content: new TextField(
-                            autofocus: true,
-                            decoration: InputDecoration(
-                                enabledBorder: OutlineInputBorder(),
+                          autofocus: true,
+                          decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(),
 //                                border: InputBorder.none,
-                                hintText: 'exemplo: Isca 1'),
-                            onSubmitted: (texto) => setState(() {
+                              hintText: 'exemplo: Isca 1'),
+                          onSubmitted: (texto) => setState(() {
 //                              _mapaNomeLocal.addAll({texto: latitude.toString() + ',' + longitude.toString()});
-                              _listaLocalSalvo.add(texto + '¨§°' + latitude.toString() + ',' + longitude.toString());
-                              _gravaListaLocaisSalvos();
-                              Navigator.of(context).pop();
-                            }),
+                                _listaLocalSalvo.add(texto +
+                                    '¨§°' +
+                                    latitude.toString() +
+                                    ',' +
+                                    longitude.toString());
+                                _gravaListaLocaisSalvos();
+                                Navigator.of(context).pop();
+                              }),
 // esse 'actions' sem o setState apenas cancela, mas o usuário pode clicar fora da janela
 //                        actions: <Widget>[
 //                          FlatButton(
@@ -106,9 +115,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 //                                }),
 //                          ),
 //                        ],
+                        ),
                       ),
-                ),
-                );},
+                );
+              },
               tooltip: 'Marcar localização no Google Maps',
               child: Icon(Icons.add_location))
           : FloatingActionButton(
@@ -146,8 +156,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 //    print('len ' + _listaLocalSalvo[indice].split('¨§°').length.toString());
     String titulo = _listaLocalSalvo[indice].split('¨§°').elementAt(0);
     String subtitulo = (_listaLocalSalvo[indice].split('¨§°').length > 1)
-                  ? _listaLocalSalvo[indice].split('¨§°').elementAt(1)
-                  : '';
+        ? _listaLocalSalvo[indice].split('¨§°').elementAt(1)
+        : '';
     return ListTile(
       title: Text(titulo),
       subtitle: Text(subtitulo),
@@ -175,5 +185,61 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     final database = await SharedPreferences.getInstance();
     final chave = 'lista_locais_salvos';
     database.setStringList(chave, _listaLocalSalvo);
+  }
+
+  void _sobre() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Quem somos'),
+            ),
+            body: Center(
+
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Text('\nGeomel - Compartilhe a natureza', style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
+                  RichText(
+                      text: TextSpan(
+                        style: TextStyle(color: Colors.blue),
+                        text: 'www.geomel.com.br')),
+                  Text('\n'),
+                  Text('Construído por alunos da Disciplina de Construção de Software'),
+                  Text('Mestrado em Computação Aplicada - UnB'),
+                  Text('\n'),
+                  Text('Carlos Magno Araujo'),
+                  Text('Felipe Gonsalves Pinheiro'),
+                  Text('Humberto Monte'),
+                  Text('Ivon Miranda Santos'),
+                  Text('Márcio Conceição Goulart'),
+                  Text('Rômulo Rodrigues Santana'),
+                  Text('Vinícius Gomes Ferreira'),
+                  Text('\n'),
+//                  RichText(
+//                      text: TextSpan(
+//                        children: [
+//                          TextSpan(
+//                              style: TextStyle(color: Colors.black),
+//                              text: 'Código disponível em: '),
+//                          TextSpan(
+//                              style: TextStyle(color: Colors.blue),
+//                              text: 'https://github.com/marciocg/geomel')
+//                        ])),
+//                Expanded(
+//                  child: FittedBox(
+//                    fit: BoxFit.contain,
+//                    child: const FlutterLogo(),
+//              ),
+//            ),
+              ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }
